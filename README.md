@@ -7,4 +7,4 @@
 
 ## Thanks
 
-Thanks to the [MicroHydra repo](https://github.com/echo-lalia/MicroHydra/) for the MicroHydra App Template.
+Thanks to the [MicroHydra Apps repo](https://github.com/echo-lalia/MicroHydra-Apps/) for all the great examples!
