@@ -18,6 +18,7 @@ from lib.display import Display
 from lib.hydra.config import Config
 from lib.userinput import UserInput
 from machine import reset
+from random import randint
 
 _DISPLAY_HEIGHT = const(135)
 _DISPLAY_WIDTH = const(240)
@@ -29,6 +30,8 @@ _FISH_EYE_SIZE = const(2)
 _FISH_SPEED = const(1)
 _FISH_HOOP_DIAMETER = const(40)
 
+_TERRAIN_BLOCK_SIZE = const(5)
+
 tft = Display()
 config = Config()
 kb = UserInput()
@@ -37,6 +40,7 @@ fish_direction = 1
 fish_x = _DISPLAY_WIDTH // 2
 fish_y = _DISPLAY_HEIGHT // 2
 play_mode = False
+terrain = []
 
 def process_input():
     global play_mode
@@ -54,6 +58,12 @@ def process_input():
         if "p" in keys:
             play_mode = True
 
+def draw_terrain():
+    global terrain
+
+    for i in range(0, len(terrain)):
+        tft.fill_rect((i * _TERRAIN_BLOCK_SIZE), (_DISPLAY_HEIGHT - terrain[i]), _TERRAIN_BLOCK_SIZE, terrain[i], config.palette[8])
+
 def draw_fish():
     global fish_x
     global fish_y
@@ -66,9 +76,6 @@ def draw_fish():
     # Draw the fish's tail.
     for i in range(0, _FISH_TAIL_LENGTH):
         tft.line(((fish_x - (_FISH_WIDTH * fish_direction)) - (i * fish_direction)), (fish_y + i), ((fish_x - (_FISH_WIDTH * fish_direction )) - (i * fish_direction)), (fish_y - i), config.palette[8])
-
-    if (play_mode == True):
-        draw_hoop()
 
 def draw_hoop():
     tft.ellipse(_DISPLAY_WIDTH // 2, _DISPLAY_HEIGHT // 2, _FISH_HOOP_DIAMETER, _FISH_HOOP_DIAMETER, config.palette[8], False)
@@ -88,12 +95,24 @@ def move_fish():
         fish_direction = 1
 
 def main_loop():
+    global terrain
+
+    i = 0
+    while i < _DISPLAY_WIDTH:
+        height = randint(_TERRAIN_BLOCK_SIZE, (_TERRAIN_BLOCK_SIZE * 2))
+        terrain.append(height)
+        i += _TERRAIN_BLOCK_SIZE
+
     while True:
         tft.fill(config.palette[2])
 
         process_input()
         move_fish()
+        draw_terrain()
         draw_fish()
+
+        if (play_mode == True):
+            draw_hoop()
 
         tft.show()
 
