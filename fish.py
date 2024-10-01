@@ -29,6 +29,8 @@ _FISH_TAIL_LENGTH = const(10)
 _FISH_EYE_SIZE = const(2)
 _FISH_SPEED = const(1)
 _FISH_HOOP_DIAMETER = const(40)
+_FISH_FOOD_DIAMETER = const(4)
+_FISH_FOOD_SPEED = const(2)
 
 _TERRAIN_BLOCK_SIZE = const(5)
 
@@ -39,7 +41,10 @@ kb = UserInput()
 fish_direction = 1
 fish_x = _DISPLAY_WIDTH // 2
 fish_y = _DISPLAY_HEIGHT // 2
+food_x = 0
+food_y = 0
 play_mode = False
+feed_mode = False
 terrain = []
 
 def process_input():
@@ -57,6 +62,9 @@ def process_input():
         # P to enter play mode.
         if "p" in keys:
             play_mode = True
+        # F to enter feed mode.
+        if "f" in keys:
+            spawn_food()
 
 def draw_terrain():
     global terrain
@@ -79,6 +87,37 @@ def draw_fish():
 
 def draw_hoop():
     tft.ellipse(_DISPLAY_WIDTH // 2, _DISPLAY_HEIGHT // 2, _FISH_HOOP_DIAMETER, _FISH_HOOP_DIAMETER, config.palette[8], False)
+
+def draw_food():
+    tft.ellipse(food_x, food_y, _FISH_FOOD_DIAMETER, _FISH_FOOD_DIAMETER, config.palette[8], True)
+
+def spawn_food():
+    global feed_mode
+    global food_x
+    global food_y
+
+    feed_mode = True
+
+    food_x = randint(0, _DISPLAY_WIDTH)
+    food_y = 0
+
+def move_food():
+    global fish_direction
+    global fish_y
+    global food_y
+
+    if (food_y < _DISPLAY_HEIGHT // 2):
+        food_y += _FISH_FOOD_SPEED
+    else:
+        if ((food_x < fish_x) & (fish_direction == 1)):
+            fish_direction = -1
+        elif ((food_x > fish_x) & (fish_direction == -1)):
+            fish_direction = 1
+
+def eat_food():
+    global feed_mode
+
+    feed_mode = False
 
 def move_fish():
     global fish_direction
@@ -107,6 +146,14 @@ def main_loop():
         tft.fill(config.palette[2])
 
         process_input()
+
+        if (feed_mode == True):
+            move_food()
+            draw_food()
+
+            if (fish_x == food_x):
+                eat_food()
+
         move_fish()
         draw_terrain()
         draw_fish()
