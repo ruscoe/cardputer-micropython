@@ -31,14 +31,16 @@ _FISH_SPEED = const(1)
 _FISH_HOOP_DIAMETER = const(40)
 _FISH_FOOD_DIAMETER = const(4)
 _FISH_FOOD_SPEED = const(2)
-
+_MAX_FISH_HEALTH = const(3)
 _TERRAIN_BLOCK_SIZE = const(5)
+_HUD_ICON_SIZE = const(3)
 
 tft = Display()
 config = Config()
 kb = UserInput()
 
 fish_direction = 1
+fish_health = 0
 fish_x = _DISPLAY_WIDTH // 2
 fish_y = _DISPLAY_HEIGHT // 2
 food_x = 0
@@ -91,6 +93,13 @@ def draw_hoop():
 def draw_food():
     tft.ellipse(food_x, food_y, _FISH_FOOD_DIAMETER, _FISH_FOOD_DIAMETER, config.palette[8], True)
 
+def draw_hud():
+    global fish_health
+
+    for i in range(1, 4):
+        fill_icon = (fish_health >= i)
+        tft.ellipse(((_HUD_ICON_SIZE * 3) * i), (_HUD_ICON_SIZE * 2), _HUD_ICON_SIZE, _HUD_ICON_SIZE, config.palette[8], fill_icon)
+
 def spawn_food():
     global feed_mode
     global food_x
@@ -116,6 +125,12 @@ def move_food():
 
 def eat_food():
     global feed_mode
+    global fish_health
+
+    fish_health += 1
+
+    if (fish_health >= _MAX_FISH_HEALTH):
+        fish_health = _MAX_FISH_HEALTH
 
     feed_mode = False
 
@@ -160,6 +175,8 @@ def main_loop():
 
         if (play_mode == True):
             draw_hoop()
+
+        draw_hud()
 
         tft.show()
 
