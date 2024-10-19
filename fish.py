@@ -22,7 +22,7 @@ from random import randint
 
 _DISPLAY_HEIGHT = const(135)
 _DISPLAY_WIDTH = const(240)
-
+_FRAME_INTERVAL = const(10)
 _FISH_WIDTH = const(25)
 _FISH_HEIGHT = const(12)
 _FISH_TAIL_LENGTH = const(10)
@@ -32,6 +32,7 @@ _FISH_HOOP_DIAMETER = const(40)
 _FISH_FOOD_DIAMETER = const(4)
 _FISH_FOOD_SPEED = const(2)
 _MAX_FISH_HEALTH = const(3)
+_HEALTH_DEGRADE_DELAY = const(10000)
 _TERRAIN_BLOCK_SIZE = const(5)
 _HUD_ICON_SIZE = const(3)
 
@@ -41,6 +42,7 @@ kb = UserInput()
 
 fish_direction = 1
 fish_health = 0
+health_delta = 0
 fish_x = _DISPLAY_WIDTH // 2
 fish_y = _DISPLAY_HEIGHT // 2
 food_x = 0
@@ -94,7 +96,15 @@ def draw_food():
     tft.ellipse(food_x, food_y, _FISH_FOOD_DIAMETER, _FISH_FOOD_DIAMETER, config.palette[8], True)
 
 def draw_hud():
-    global fish_health
+    global fish_health, health_delta
+
+    if (health_delta >= _HEALTH_DEGRADE_DELAY):
+        fish_health -= 1
+
+        if (fish_health <= 0):
+            fish_health = 0
+
+        health_delta = 0
 
     for i in range(1, 4):
         fill_icon = (fish_health >= i)
@@ -149,7 +159,7 @@ def move_fish():
         fish_direction = 1
 
 def main_loop():
-    global terrain
+    global terrain, health_delta
 
     i = 0
     while i < _DISPLAY_WIDTH:
@@ -180,6 +190,8 @@ def main_loop():
 
         tft.show()
 
-        time.sleep_ms(10)
+        health_delta += _FRAME_INTERVAL
+
+        time.sleep_ms(_FRAME_INTERVAL)
 
 main_loop()
