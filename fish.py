@@ -44,8 +44,8 @@ kb = UserInput()
 fish_direction = 1
 fish_health = 0
 health_delta = 0
-fish_x = _DISPLAY_WIDTH // 2
-fish_y = _DISPLAY_HEIGHT // 2
+fish_x = (_DISPLAY_WIDTH // 2)
+fish_y = (_DISPLAY_HEIGHT // 2)
 food_x = 0
 food_y = 0
 play_mode = False
@@ -91,7 +91,7 @@ def draw_fish():
         tft.line(((fish_x - (_FISH_WIDTH * fish_direction)) - (i * fish_direction)), (fish_y + i), ((fish_x - (_FISH_WIDTH * fish_direction )) - (i * fish_direction)), (fish_y - i), config.palette[8])
 
 def draw_hoop():
-    tft.ellipse(_DISPLAY_WIDTH // 2, _DISPLAY_HEIGHT // 2, _HOOP_DIAMETER, _HOOP_DIAMETER, config.palette[8], False)
+    tft.ellipse((_DISPLAY_WIDTH // 2), (_DISPLAY_HEIGHT // 2), _HOOP_DIAMETER, _HOOP_DIAMETER, config.palette[8], False)
 
 def draw_food():
     tft.ellipse(food_x, food_y, _FOOD_DIAMETER, _FOOD_DIAMETER, config.palette[8], True)
@@ -126,7 +126,7 @@ def move_food():
     global fish_y
     global food_y
 
-    if (food_y < _DISPLAY_HEIGHT // 2):
+    if (food_y < (_DISPLAY_HEIGHT // 2)):
         food_y += _FOOD_SPEED
     else:
         if ((food_x < fish_x) & (fish_direction == 1)):
