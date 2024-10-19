@@ -29,10 +29,10 @@ _FISH_HEIGHT = const(12)
 _FISH_TAIL_LENGTH = const(10)
 _FISH_EYE_SIZE = const(2)
 _FISH_SPEED = const(1)
-_FISH_HOOP_DIAMETER = const(40)
-_FISH_FOOD_DIAMETER = const(4)
-_FISH_FOOD_SPEED = const(2)
-_MAX_FISH_HEALTH = const(3)
+_HOOP_DIAMETER = const(40)
+_FOOD_DIAMETER = const(4)
+_FOOD_SPEED = const(2)
+_MAX_HEALTH = const(3)
 _HEALTH_DEGRADE_DELAY = const(10000)
 _TERRAIN_BLOCK_SIZE = const(5)
 _HUD_ICON_SIZE = const(3)
@@ -91,10 +91,10 @@ def draw_fish():
         tft.line(((fish_x - (_FISH_WIDTH * fish_direction)) - (i * fish_direction)), (fish_y + i), ((fish_x - (_FISH_WIDTH * fish_direction )) - (i * fish_direction)), (fish_y - i), config.palette[8])
 
 def draw_hoop():
-    tft.ellipse(_DISPLAY_WIDTH // 2, _DISPLAY_HEIGHT // 2, _FISH_HOOP_DIAMETER, _FISH_HOOP_DIAMETER, config.palette[8], False)
+    tft.ellipse(_DISPLAY_WIDTH // 2, _DISPLAY_HEIGHT // 2, _HOOP_DIAMETER, _HOOP_DIAMETER, config.palette[8], False)
 
 def draw_food():
-    tft.ellipse(food_x, food_y, _FISH_FOOD_DIAMETER, _FISH_FOOD_DIAMETER, config.palette[8], True)
+    tft.ellipse(food_x, food_y, _FOOD_DIAMETER, _FOOD_DIAMETER, config.palette[8], True)
 
 def draw_hud():
     global fish_health, health_delta
@@ -127,7 +127,7 @@ def move_food():
     global food_y
 
     if (food_y < _DISPLAY_HEIGHT // 2):
-        food_y += _FISH_FOOD_SPEED
+        food_y += _FOOD_SPEED
     else:
         if ((food_x < fish_x) & (fish_direction == 1)):
             fish_direction = -1
@@ -140,8 +140,8 @@ def eat_food():
 
     fish_health += 1
 
-    if (fish_health >= _MAX_FISH_HEALTH):
-        fish_health = _MAX_FISH_HEALTH
+    if (fish_health >= _MAX_HEALTH):
+        fish_health = _MAX_HEALTH
 
     feed_mode = False
 
