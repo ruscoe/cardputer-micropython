@@ -6,6 +6,7 @@ A fish swims across the screen.
 
 Press "P" to enter play mode and the fish will swim through a hoop.
 Press "ESC" to return to default mode.
+Press "F" to feed the fish. The fish's health will increase when fed.
 Press "G0" to exit.
 
 Author: Dan Ruscoe (danruscoe@protonmail.com)
