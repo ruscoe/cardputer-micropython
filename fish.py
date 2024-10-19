@@ -1,4 +1,4 @@
-"""Pet Fish.
+"""Fish.
 
 Designed for the M5Stack Cardputer.
 
